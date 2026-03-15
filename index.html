@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline — Joe's Coding Dashboard</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-2: #1a1a26;
+            --border: #2a2a3a;
+            --text: #e4e4ef;
+            --text-dim: #8888a0;
+            --accent-ship: #3b82f6;
+            --accent-auto: #8b5cf6;
+            --accent-experiment: #f59e0b;
+            --accent-revenue: #10b981;
+            --accent-maintain: #6b7280;
+            --accent-learn: #ec4899;
+            --tag-bg: rgba(255,255,255,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-top: 3px solid var(--card-accent);
+        }
+
+        .stat-card:hover {
+            background: var(--surface-2);
+            transform: translateY(-2px);
+        }
+
+        .stat-card .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            display: block;
+            color: var(--card-accent);
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            margin-top: 0.25rem;
+        }
+
+        .stat-card .stat-active {
+            font-size: 0.7rem;
+            color: var(--card-accent);
+            margin-top: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .category-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border-left: 4px solid var(--cat-accent);
+        }
+
+        .category-header {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .category-header:hover {
+            background: var(--surface-2);
+        }
+
+        .category-header h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .category-header .cat-icon {
+            font-size: 1.4rem;
+        }
+
+        .category-header .cat-count {
+            font-size: 0.75rem;
+            background: var(--tag-bg);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            color: var(--text-dim);
+        }
+
+        .category-header .cat-active-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .category-header .chevron {
+            color: var(--text-dim);
+            transition: transform 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .category-section.open .chevron {
+            transform: rotate(180deg);
+        }
+
+        .category-body {
+            display: none;
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .category-section.open .category-body {
+            display: block;
+        }
+
+        .category-desc {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Active project section */
+        .active-project {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .active-project h3 {
+            font-size: 1rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .active-project .active-status {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist li {
+            padding: 0.4rem 0;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .checklist li .check {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+
+        .checklist li.done {
+            color: var(--text-dim);
+            text-decoration: line-through;
+        }
+
+        .checklist li.done .check {
+            background: var(--accent-ship);
+            border-color: var(--accent-ship);
+        }
+
+        .checklist li.done .check::after {
+            content: '\2713';
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 0.35rem;
+        }
+
+        /* Backlog table */
+        .backlog-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .backlog-table th {
+            text-align: left;
+            padding: 0.6rem 0.75rem;
+            color: var(--text-dim);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        .backlog-table td {
+            padding: 0.7rem 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            vertical-align: top;
+        }
+
+        .backlog-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .backlog-table tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .backlog-table .item-num {
+            color: var(--text-dim);
+            font-weight: 600;
+            width: 30px;
+        }
+
+        .backlog-table .item-name {
+            font-weight: 600;
+        }
+
+        .priority-tag {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .priority-high { background: rgba(239,68,68,0.15); color: #f87171; }
+        .priority-medium { background: rgba(245,158,11,0.15); color: #fbbf24; }
+        .priority-low { background: rgba(107,114,128,0.15); color: #9ca3af; }
+
+        .effort-tag {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+            background: var(--tag-bg);
+            color: var(--text-dim);
+            white-space: nowrap;
+        }
+
+        .section-divider {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 1.5rem 0 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Maintain table */
+        .maintain-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .maintain-table th {
+            text-align: left;
+            padding: 0.6rem 0.75rem;
+            color: var(--text-dim);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        .maintain-table td {
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .cadence-tag {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+            background: var(--tag-bg);
+            color: var(--text-dim);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .container {
+                padding: 1rem;
+            }
+            header h1 {
+                font-size: 1.5rem;
+            }
+            .backlog-table .hide-mobile {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pipeline</h1>
+            <p>Pick a category. Grab the top item. Build.</p>
+        </header>
+
+        <div class="stats-row" id="stats-row"></div>
+        <div id="categories"></div>
+    </div>
+
+    <script>
+    const DATA = {
+        ship: {
+            icon: "&#9889;",
+            label: "Ship",
+            accent: "#3b82f6",
+            desc: "Active projects with a finish line. Build it, deploy it, done.",
+            active: {
+                name: "joes30.com — 30th Birthday Website",
+                status: "Live, shared with guests. Games content remaining.",
+                tasks: [
+                    { text: "Review current state", done: true },
+                    { text: "Define \"done\" — games content is the main remaining work", done: true },
+                    { text: "Create Amazon.fr shopping list (SHOPPING-LIST.md)", done: true },
+                    { text: "Create games plan (GAMES-PLAN.md)", done: true },
+                    { text: "Finalise Birthday Olympics events (6 events, MrBeast style)", done: false },
+                    { text: "Finalise evening games for Days 1, 2, 3, 5", done: false },
+                    { text: "Decide all-week challenges (Secret Assassin, Taskmaster, etc.)", done: false },
+                    { text: "Write game content into the site (games.html / games.js)", done: false },
+                    { text: "Order Amazon.fr delivery to chateau (~25-26 Apr)", done: false },
+                    { text: "Book 9-seater car from Poitiers airport (29 Apr - 4 May)", done: false }
+                ]
+            },
+            backlog: [
+                { name: "Wedding Website", done: "Live, shareable with guests, video trailer working", priority: "high" },
+                { name: "Wedding Video Trailer", done: "Cinematic proposal story video, embedded on wedding site", priority: "high" },
+                { name: "Personal Site / Portfolio", done: "One-pager: who you are, projects, contact. Deployed", priority: "medium" },
+                { name: "Health App (Sophie)", done: "Deployed, categories populated, Sophie using it daily", priority: "medium" },
+                { name: "Cortex", done: "Local dashboard/brainstorming platform, stable and useful", priority: "medium" },
+                { name: "Trip App", done: "Live feed, games, social features, usable for a real trip", priority: "low" },
+                { name: "Anchor", done: "Core task/habit/goal loop working", priority: "low" },
+                { name: "Mission Control", done: "Life dashboard live and useful", priority: "low" }
+            ]
+        },
+        automate: {
+            icon: "&#9881;",
+            label: "Automate",
+            accent: "#8b5cf6",
+            desc: "Workflows, scripts, scheduled jobs that save you time or run without you.",
+            active: null,
+            backlog: [
+                { name: "Meeting transcript pipeline", desc: "Mini recordings \u2192 structured notes in Brain vault automatically", effort: "Medium" },
+                { name: "Daily note generator", desc: "Auto-create Obsidian daily note with agenda, tasks, weather", effort: "Small" },
+                { name: "Calendar \u2192 daily note sync", desc: "Pull Google Calendar events into Obsidian daily note each morning", effort: "Small" },
+                { name: "Client prep automation", desc: "Before a meeting, auto-pull stakeholder intel, recent notes, open actions", effort: "Medium" },
+                { name: "Email digest builder", desc: "Scan Gmail, summarise key emails, push to Obsidian inbox", effort: "Medium" },
+                { name: "Weekly status report generator", desc: "Auto-pull from notes, meetings, tasks \u2192 draft client-ready update", effort: "Medium" },
+                { name: "Social media scheduler", desc: "Queue and auto-post content to X/LinkedIn on a schedule", effort: "Medium" },
+                { name: "Knowledge sync", desc: "Watch vault for new notes, auto-tag, auto-link, suggest connections", effort: "Large" },
+                { name: "Invoice/expense tracker", desc: "Scan receipts, log expenses, flag unbilled time", effort: "Medium" },
+                { name: "Vault health check", desc: "Weekly cron \u2014 find orphan notes, broken links, stale content", effort: "Small" },
+                { name: "GitHub activity digest", desc: "Daily summary of commits, PRs, issues across all repos \u2192 Obsidian", effort: "Small" },
+                { name: "Site uptime monitoring", desc: "Ping deployed sites, notify if down", effort: "Small" },
+                { name: "Automatic project backups", desc: "Scheduled backup of vault, Claude Code memory, local configs", effort: "Small" },
+                { name: "Family date reminders", desc: "Auto-notify ahead of birthdays and key dates", effort: "Small" }
+            ]
+        },
+        experiment: {
+            icon: "&#128161;",
+            label: "Experiment",
+            accent: "#f59e0b",
+            desc: "Quick spikes \u2014 1-2 sessions max. Then promote to Ship or kill.",
+            active: null,
+            backlog: [
+                { name: "\"Build in public\" on X/LinkedIn", desc: "Does documenting what I'm building generate engagement?", sessions: 2 },
+                { name: "AI content on X", desc: "Can I automate valuable AI/consulting content posts?", sessions: 2 },
+                { name: "Sell Claude Code consulting workflow", desc: "Would consultants pay for a consulting-OS starter kit?", sessions: 1 },
+                { name: "AI-powered client research tool", desc: "Paste company name \u2192 get brief. Would I use this daily?", sessions: 2 },
+                { name: "Chrome extension for client work", desc: "Quick-capture extension that sends to Brain vault", sessions: 1 },
+                { name: "Voice \u2192 structured notes", desc: "Pipe voice memos straight into Obsidian with AI formatting", sessions: 1 },
+                { name: "Local RAG over Brain vault", desc: "How good is local LLM Q&A over my own notes?", sessions: 2 },
+                { name: "Automated slide deck builder", desc: "Obsidian notes \u2192 polished .pptx for client deliverables", sessions: 2 },
+                { name: "WhatsApp bot for trip", desc: "Auto-respond to guest questions from joes30 site data", sessions: 1 },
+                { name: "Habit tracker widget", desc: "Quick iOS/web widget showing daily habit streaks", sessions: 1 },
+                { name: "Claude Code plugin for consulting", desc: "Custom skill that pulls client context before any task", sessions: 2 },
+                { name: "Newsletter site builder", desc: "Spin up a content site that drives traffic from X/Reddit", sessions: 2 },
+                { name: "X/Twitter account + first 30 posts", desc: "Create accounts, schedule 30 days of AI content, measure", sessions: 2 }
+            ]
+        },
+        revenue: {
+            icon: "&#128176;",
+            label: "Revenue",
+            accent: "#10b981",
+            desc: "Ideas that could make money. Validate before building.",
+            active: null,
+            backlog: [
+                { name: "Acquire small digital asset", desc: "Buy a site/app already making money, improve it", capital: "\u00a30-5k" },
+                { name: "AI content on X/LinkedIn", desc: "Build audience \u2192 paid newsletter or consulting leads", capital: "\u00a30" },
+                { name: "\"Done for you\" AI setup for local SMBs", desc: "Fixed-price package: set up AI tools for a business in a week", capital: "\u00a30" },
+                { name: "Paid Obsidian consulting-OS template", desc: "Package Brain vault structure for consultants. Gumroad, \u00a329-49", capital: "\u00a30" },
+                { name: "Productised consulting service", desc: "Package a repeatable Hackett-style analysis as self-serve tool", capital: "\u00a30-1k" },
+                { name: "Micro-SaaS: Meeting intelligence", desc: "Upload recording \u2192 structured notes. Charge per use or monthly", capital: "\u00a30-1k" },
+                { name: "SaaS for niche client problem", desc: "Find a pain point from consulting, build a tool", capital: "\u00a31-5k" },
+                { name: "Template marketplace", desc: "Sell Obsidian/Notion templates for consultants on Gumroad", capital: "\u00a30" },
+                { name: "Freelance dev projects", desc: "Take on small builds (Next.js, Supabase) via Upwork/Toptal", capital: "\u00a30" },
+                { name: "Reddit community for AI consultants", desc: "Build community \u2192 monetise with resources, templates, courses", capital: "\u00a30" }
+            ]
+        },
+        maintain: {
+            icon: "&#128295;",
+            label: "Maintain",
+            accent: "#6b7280",
+            desc: "Existing stuff that needs upkeep. Not a project \u2014 just keep it healthy.",
+            active: null,
+            items: [
+                { system: "Obsidian Brain vault", cadence: "Weekly", task: "Clear inbox, process loose notes, check orphans" },
+                { system: "Consulting-OS", cadence: "As needed", task: "Update frameworks, add knowledge items after engagements" },
+                { system: "Cortex", cadence: "As needed", task: "Keep local dashboard running, fix issues" },
+                { system: "Claude Code setup", cadence: "Monthly", task: "Update plugins, review CLAUDE.md, prune memory" },
+                { system: "GitHub repos", cadence: "Monthly", task: "Archive dead repos, update READMEs, check dependencies" },
+                { system: "joes30.com", cadence: "After May", task: "Archive or shut down" },
+                { system: "Wedding site", cadence: "After wedding", task: "Archive or shut down" }
+            ]
+        },
+        learn: {
+            icon: "&#128218;",
+            label: "Learn",
+            accent: "#ec4899",
+            desc: "Skills to pick up, tech to explore. Pull from here when you have curiosity energy.",
+            active: null,
+            backlog: [
+                { name: "Marketing / growth / distribution", desc: "The gap is getting things in front of people", format: "Course / book" },
+                { name: "How to buy a digital business", desc: "Due diligence, valuation, where to find deals", format: "Research" },
+                { name: "Next.js App Router deep dive", desc: "Your stack \u2014 know it properly", format: "Build something" },
+                { name: "Supabase edge functions", desc: "For Anchor and future SaaS", format: "Tutorial + spike" },
+                { name: "AI agents / Claude Agent SDK", desc: "Build smarter automations", format: "Build an agent" },
+                { name: "Figma \u2192 code workflow", desc: "Faster UI development", format: "Practice with MCP" },
+                { name: "iOS shortcuts / widgets", desc: "Personal tools, habit tracking", format: "Build one shortcut" },
+                { name: "Data visualisation (D3 / Recharts)", desc: "For consulting deliverables and dashboards", format: "Build a component" },
+                { name: "Stripe integration", desc: "For any revenue project \u2014 need to take payments", format: "Follow docs" },
+                { name: "Prompt engineering for consulting", desc: "Better AI-assisted client work", format: "Structured practice" },
+                { name: "SEO fundamentals", desc: "For content plays, newsletter sites, landing pages", format: "Course / guide" },
+                { name: "Financial modelling for side hustles", desc: "Know your numbers before investing time/money", format: "Spreadsheets" }
+            ]
+        }
+    };
+
+    // Render stats row
+    function renderStats() {
+        const row = document.getElementById('stats-row');
+        Object.entries(DATA).forEach(([key, cat]) => {
+            const count = cat.backlog?.length || cat.items?.length || 0;
+            const activeText = cat.active ? `Active: ${cat.active.name.split('—')[0].trim()}` : 'None active';
+            const card = document.createElement('div');
+            card.className = 'stat-card';
+            card.style.setProperty('--card-accent', cat.accent);
+            card.onclick = () => {
+                const section = document.getElementById(`cat-${key}`);
+                section.classList.toggle('open');
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+            card.innerHTML = `
+                <span class="stat-num">${count + (cat.active ? 1 : 0)}</span>
+                <span class="stat-label">${cat.label}</span>
+                <span class="stat-active">${activeText}</span>
+            `;
+            row.appendChild(card);
+        });
+    }
+
+    // Render categories
+    function renderCategories() {
+        const container = document.getElementById('categories');
+
+        Object.entries(DATA).forEach(([key, cat]) => {
+            const section = document.createElement('div');
+            section.className = 'category-section';
+            section.id = `cat-${key}`;
+            section.style.setProperty('--cat-accent', cat.accent);
+
+            const count = cat.backlog?.length || cat.items?.length || 0;
+            const activeBadge = cat.active
+                ? `<span class="cat-active-badge" style="background:${cat.accent}22;color:${cat.accent}">Active</span>`
+                : '';
+
+            let bodyHTML = `<p class="category-desc">${cat.desc}</p>`;
+
+            // Active project
+            if (cat.active) {
+                const tasks = cat.active.tasks;
+                const done = tasks.filter(t => t.done).length;
+                const pct = Math.round((done / tasks.length) * 100);
+
+                bodyHTML += `
+                    <div class="section-divider">Active Project</div>
+                    <div class="active-project">
+                        <h3>${cat.active.name}</h3>
+                        <div class="active-status">${cat.active.status}</div>
+                        <ul class="checklist">
+                            ${tasks.map(t => `
+                                <li class="${t.done ? 'done' : ''}">
+                                    <span class="check"></span>
+                                    <span>${t.text}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width:${pct}%;background:${cat.accent}"></div>
+                        </div>
+                        <div class="progress-label">${done}/${tasks.length} complete (${pct}%)</div>
+                    </div>
+                `;
+            }
+
+            // Backlog
+            if (cat.backlog && cat.backlog.length > 0) {
+                bodyHTML += `<div class="section-divider">Backlog (${cat.backlog.length})</div>`;
+
+                if (key === 'ship') {
+                    bodyHTML += `<table class="backlog-table"><thead><tr>
+                        <th>#</th><th>Project</th><th class="hide-mobile">What "done" looks like</th><th>Priority</th>
+                    </tr></thead><tbody>`;
+                    cat.backlog.forEach((item, i) => {
+                        const pClass = item.priority === 'high' ? 'priority-high' : item.priority === 'medium' ? 'priority-medium' : 'priority-low';
+                        bodyHTML += `<tr>
+                            <td class="item-num">${i + 1}</td>
+                            <td class="item-name">${item.name}</td>
+                            <td class="hide-mobile">${item.done}</td>
+                            <td><span class="priority-tag ${pClass}">${item.priority}</span></td>
+                        </tr>`;
+                    });
+                    bodyHTML += `</tbody></table>`;
+                } else if (key === 'automate') {
+                    bodyHTML += `<table class="backlog-table"><thead><tr>
+                        <th>#</th><th>Idea</th><th class="hide-mobile">What it does</th><th>Effort</th>
+                    </tr></thead><tbody>`;
+                    cat.backlog.forEach((item, i) => {
+                        bodyHTML += `<tr>
+                            <td class="item-num">${i + 1}</td>
+                            <td class="item-name">${item.name}</td>
+                            <td class="hide-mobile">${item.desc}</td>
+                            <td><span class="effort-tag">${item.effort}</span></td>
+                        </tr>`;
+                    });
+                    bodyHTML += `</tbody></table>`;
+                } else if (key === 'experiment') {
+                    bodyHTML += `<table class="backlog-table"><thead><tr>
+                        <th>#</th><th>Idea</th><th class="hide-mobile">Question to answer</th><th>Sessions</th>
+                    </tr></thead><tbody>`;
+                    cat.backlog.forEach((item, i) => {
+                        bodyHTML += `<tr>
+                            <td class="item-num">${i + 1}</td>
+                            <td class="item-name">${item.name}</td>
+                            <td class="hide-mobile">${item.desc}</td>
+                            <td><span class="effort-tag">${item.sessions} max</span></td>
+                        </tr>`;
+                    });
+                    bodyHTML += `</tbody></table>`;
+                } else if (key === 'revenue') {
+                    bodyHTML += `<table class="backlog-table"><thead><tr>
+                        <th>#</th><th>Idea</th><th class="hide-mobile">Description</th><th>Capital</th>
+                    </tr></thead><tbody>`;
+                    cat.backlog.forEach((item, i) => {
+                        bodyHTML += `<tr>
+                            <td class="item-num">${i + 1}</td>
+                            <td class="item-name">${item.name}</td>
+                            <td class="hide-mobile">${item.desc}</td>
+                            <td><span class="effort-tag">${item.capital}</span></td>
+                        </tr>`;
+                    });
+                    bodyHTML += `</tbody></table>`;
+                } else if (key === 'learn') {
+                    bodyHTML += `<table class="backlog-table"><thead><tr>
+                        <th>#</th><th>Topic</th><th class="hide-mobile">Why</th><th>Format</th>
+                    </tr></thead><tbody>`;
+                    cat.backlog.forEach((item, i) => {
+                        bodyHTML += `<tr>
+                            <td class="item-num">${i + 1}</td>
+                            <td class="item-name">${item.name}</td>
+                            <td class="hide-mobile">${item.desc}</td>
+                            <td><span class="effort-tag">${item.format}</span></td>
+                        </tr>`;
+                    });
+                    bodyHTML += `</tbody></table>`;
+                }
+            }
+
+            // Maintain items
+            if (cat.items) {
+                bodyHTML += `<table class="maintain-table"><thead><tr>
+                    <th>System</th><th>Cadence</th><th class="hide-mobile">What to do</th>
+                </tr></thead><tbody>`;
+                cat.items.forEach(item => {
+                    bodyHTML += `<tr>
+                        <td class="item-name">${item.system}</td>
+                        <td><span class="cadence-tag">${item.cadence}</span></td>
+                        <td class="hide-mobile">${item.task}</td>
+                    </tr>`;
+                });
+                bodyHTML += `</tbody></table>`;
+            }
+
+            section.innerHTML = `
+                <div class="category-header">
+                    <h2><span class="cat-icon">${cat.icon}</span> ${cat.label} ${activeBadge}</h2>
+                    <div style="display:flex;align-items:center;gap:0.75rem">
+                        <span class="cat-count">${count + (cat.active ? 1 : 0)} items</span>
+                        <span class="chevron">&#9660;</span>
+                    </div>
+                </div>
+                <div class="category-body">${bodyHTML}</div>
+            `;
+
+            section.querySelector('.category-header').onclick = () => {
+                section.classList.toggle('open');
+            };
+
+            container.appendChild(section);
+        });
+    }
+
+    renderStats();
+    renderCategories();
+    </script>
+</body>
+</html>

@@ -360,6 +360,54 @@
             color: var(--text-dim);
         }
 
+        .size-tag {
+            font-size: 0.6rem;
+            padding: 0.15rem 0.45rem;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .size-xs { background: rgba(107,114,128,0.2); color: #9ca3af; }
+        .size-s { background: rgba(59,130,246,0.15); color: #60a5fa; }
+        .size-m { background: rgba(245,158,11,0.15); color: #fbbf24; }
+        .size-l { background: rgba(239,68,68,0.15); color: #f87171; }
+
+        .session-guide {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .session-guide-item {
+            text-align: center;
+            padding: 0.75rem;
+        }
+
+        .session-guide-item .sg-size {
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .session-guide-item .sg-time {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .sub-section-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            margin: 1.25rem 0 0.5rem;
+            font-weight: 600;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .stats-row {
@@ -387,8 +435,27 @@
     <div class="container">
         <header>
             <h1>Pipeline</h1>
-            <p>Pick a category. Grab the top item. Build.</p>
+            <p>How much time do you have? Pick a task that fits. No switching.</p>
         </header>
+
+        <div class="session-guide">
+            <div class="session-guide-item">
+                <div class="sg-size size-tag size-xs">XS</div>
+                <div class="sg-time">15-30 min</div>
+            </div>
+            <div class="session-guide-item">
+                <div class="sg-size size-tag size-s">S</div>
+                <div class="sg-time">30-60 min</div>
+            </div>
+            <div class="session-guide-item">
+                <div class="sg-size size-tag size-m">M</div>
+                <div class="sg-time">1-2 hours</div>
+            </div>
+            <div class="session-guide-item">
+                <div class="sg-size size-tag size-l">L</div>
+                <div class="sg-time">2-4 hours</div>
+            </div>
+        </div>
 
         <div class="stats-row" id="stats-row"></div>
         <div id="categories"></div>
@@ -405,28 +472,28 @@
                 name: "joes30.com — 30th Birthday Website",
                 status: "Live, shared with guests. Games content remaining.",
                 tasks: [
-                    { text: "Review current state", done: true },
-                    { text: "Define \"done\" — games content is the main remaining work", done: true },
-                    { text: "Create Amazon.fr shopping list (SHOPPING-LIST.md)", done: true },
-                    { text: "Create games plan (GAMES-PLAN.md)", done: true },
-                    { text: "Finalise Birthday Olympics events (6 events, MrBeast style)", done: false },
-                    { text: "Finalise evening games for Days 1, 2, 3, 5", done: false },
-                    { text: "Decide all-week challenges (Secret Assassin, Taskmaster, etc.)", done: false },
-                    { text: "Write game content into the site (games.html / games.js)", done: false },
-                    { text: "Order Amazon.fr delivery to chateau (~25-26 Apr)", done: false },
-                    { text: "Book 9-seater car from Poitiers airport (29 Apr - 4 May)", done: false }
+                    { text: "Review current state", done: true, size: "M" },
+                    { text: "Define \"done\" — games content is the main remaining work", done: true, size: "S" },
+                    { text: "Create Amazon.fr shopping list (SHOPPING-LIST.md)", done: true, size: "M" },
+                    { text: "Create games plan (GAMES-PLAN.md)", done: true, size: "M" },
+                    { text: "Finalise Birthday Olympics events (pick 4 more)", done: false, size: "S" },
+                    { text: "Finalise evening games for Days 1, 2, 3, 5", done: false, size: "S" },
+                    { text: "Decide all-week challenges", done: false, size: "S" },
+                    { text: "Write game content into games.html / games.js", done: false, size: "M" },
+                    { text: "Order Amazon.fr delivery to chateau (~25-26 Apr)", done: false, size: "XS" },
+                    { text: "Book 9-seater car from Poitiers airport", done: false, size: "XS" }
                 ]
             },
             backlog: [
-                { name: "Legal Wedding Website", done: "Live, shareable with guests for the legal ceremony", priority: "high" },
-                { name: "Tuscany Wedding Website", done: "Live, shareable with guests for the Tuscany wedding", priority: "high" },
-                { name: "Wedding Video Trailer", done: "Cinematic proposal story video, embedded on wedding site", priority: "high" },
-                { name: "Personal Site / Portfolio", done: "One-pager: who you are, projects, contact. Deployed", priority: "medium" },
-                { name: "Health App (Sophie)", done: "Deployed, categories populated, Sophie using it daily", priority: "medium" },
-                { name: "Cortex", done: "Local dashboard/brainstorming platform, stable and useful", priority: "medium" },
-                { name: "Trip App", done: "Live feed, games, social features, usable for a real trip", priority: "low" },
-                { name: "Anchor", done: "Core task/habit/goal loop working", priority: "low" },
-                { name: "Mission Control", done: "Life dashboard live and useful", priority: "low" }
+                { name: "Legal Wedding Website", done: "5 phases: review \u2192 define done \u2192 build \u2192 polish \u2192 share", priority: "high", phases: 5, sizes: "S S M S XS" },
+                { name: "Tuscany Wedding Website", done: "6 phases: plan \u2192 design \u2192 RSVP \u2192 travel info \u2192 polish \u2192 deploy", priority: "high", phases: 6, sizes: "M M M S S XS" },
+                { name: "Wedding Video Trailer", done: "4 phases: assets \u2192 first cut \u2192 polish \u2192 embed", priority: "high", phases: 4, sizes: "S M M XS" },
+                { name: "Personal Site / Portfolio", done: "3 phases: plan \u2192 build \u2192 deploy", priority: "medium", phases: 3, sizes: "S M XS" },
+                { name: "Health App (Sophie)", done: "5 phases: review \u2192 structure \u2192 UI \u2192 dashboard \u2192 deploy", priority: "medium", phases: 5, sizes: "S S M M S" },
+                { name: "Cortex", done: "3 phases: review \u2192 fix \u2192 define scope", priority: "medium", phases: 3, sizes: "S M S" },
+                { name: "Trip App", done: "4 phases: review \u2192 MVP \u2192 build \u2192 deploy", priority: "low", phases: 4, sizes: "S M L S" },
+                { name: "Anchor", done: "4 phases: review \u2192 MVP \u2192 build \u2192 polish", priority: "low", phases: 4, sizes: "S M L M" },
+                { name: "Mission Control", done: "3 phases: define \u2192 build v1 \u2192 integrate", priority: "low", phases: 3, sizes: "S M M" }
             ]
         },
         automate: {
@@ -435,43 +502,68 @@
             accent: "#8b5cf6",
             desc: "Workflows, scripts, scheduled jobs that save you time or run without you.",
             active: null,
-            backlog: [
-                { name: "Meeting transcript pipeline", desc: "Mini recordings \u2192 structured notes in Brain vault automatically", effort: "Medium" },
-                { name: "Daily note generator", desc: "Auto-create Obsidian daily note with agenda, tasks, weather", effort: "Small" },
-                { name: "Calendar \u2192 daily note sync", desc: "Pull Google Calendar events into Obsidian daily note each morning", effort: "Small" },
-                { name: "Client prep automation", desc: "Before a meeting, auto-pull stakeholder intel, recent notes, open actions", effort: "Medium" },
-                { name: "Email digest builder", desc: "Scan Gmail, summarise key emails, push to Obsidian inbox", effort: "Medium" },
-                { name: "Weekly status report generator", desc: "Auto-pull from notes, meetings, tasks \u2192 draft client-ready update", effort: "Medium" },
-                { name: "Social media scheduler", desc: "Queue and auto-post content to X/LinkedIn on a schedule", effort: "Medium" },
-                { name: "Knowledge sync", desc: "Watch vault for new notes, auto-tag, auto-link, suggest connections", effort: "Large" },
-                { name: "Invoice/expense tracker", desc: "Scan receipts, log expenses, flag unbilled time", effort: "Medium" },
-                { name: "Vault health check", desc: "Weekly cron \u2014 find orphan notes, broken links, stale content", effort: "Small" },
-                { name: "GitHub activity digest", desc: "Daily summary of commits, PRs, issues across all repos \u2192 Obsidian", effort: "Small" },
-                { name: "Site uptime monitoring", desc: "Ping deployed sites, notify if down", effort: "Small" },
-                { name: "Automatic project backups", desc: "Scheduled backup of vault, Claude Code memory, local configs", effort: "Small" },
-                { name: "Family date reminders", desc: "Auto-notify ahead of birthdays and key dates", effort: "Small" }
+            sections: [
+                {
+                    label: "Quick Wins",
+                    items: [
+                        { name: "Site uptime monitoring", desc: "Ping deployed sites, notify if down", size: "XS" },
+                        { name: "Family date reminders", desc: "Auto-notify ahead of birthdays", size: "XS" },
+                        { name: "Daily note generator", desc: "Auto-create Obsidian daily note with agenda, tasks, weather", size: "S" },
+                        { name: "Calendar \u2192 daily note sync", desc: "Pull Google Calendar events into daily note each morning", size: "S" },
+                        { name: "Vault health check", desc: "Weekly cron \u2014 find orphan notes, broken links", size: "S" },
+                        { name: "GitHub activity digest", desc: "Daily summary of commits, PRs, issues \u2192 Obsidian", size: "S" },
+                        { name: "Automatic project backups", desc: "Scheduled backup of vault, memory, configs", size: "S" }
+                    ]
+                },
+                {
+                    label: "Bigger Builds",
+                    items: [
+                        { name: "Meeting transcript pipeline", desc: "Mini recordings \u2192 structured notes in Brain vault", size: "M" },
+                        { name: "Client prep automation", desc: "Auto-pull stakeholder intel, recent notes before meetings", size: "M" },
+                        { name: "Email digest builder", desc: "Scan Gmail, summarise key emails \u2192 Obsidian inbox", size: "M" },
+                        { name: "Weekly status report generator", desc: "Notes + meetings + tasks \u2192 draft client update", size: "M" },
+                        { name: "Social media scheduler", desc: "Queue and auto-post to X/LinkedIn", size: "M" },
+                        { name: "Invoice/expense tracker", desc: "Scan receipts, log expenses, flag unbilled time", size: "M" },
+                        { name: "Knowledge sync", desc: "Watch vault, auto-tag, auto-link, suggest connections", size: "L" }
+                    ]
+                }
             ]
         },
         experiment: {
             icon: "&#128161;",
             label: "Experiment",
             accent: "#f59e0b",
-            desc: "Quick spikes \u2014 1-2 sessions max. Then promote to Ship or kill.",
+            desc: "Quick spikes \u2014 1-2 sessions max. Promote to Ship or kill.",
             active: null,
-            backlog: [
-                { name: "\"Build in public\" on X/LinkedIn", desc: "Does documenting what I'm building generate engagement?", sessions: 2 },
-                { name: "AI content on X", desc: "Can I automate valuable AI/consulting content posts?", sessions: 2 },
-                { name: "Sell Claude Code consulting workflow", desc: "Would consultants pay for a consulting-OS starter kit?", sessions: 1 },
-                { name: "AI-powered client research tool", desc: "Paste company name \u2192 get brief. Would I use this daily?", sessions: 2 },
-                { name: "Chrome extension for client work", desc: "Quick-capture extension that sends to Brain vault", sessions: 1 },
-                { name: "Voice \u2192 structured notes", desc: "Pipe voice memos straight into Obsidian with AI formatting", sessions: 1 },
-                { name: "Local RAG over Brain vault", desc: "How good is local LLM Q&A over my own notes?", sessions: 2 },
-                { name: "Automated slide deck builder", desc: "Obsidian notes \u2192 polished .pptx for client deliverables", sessions: 2 },
-                { name: "WhatsApp bot for trip", desc: "Auto-respond to guest questions from joes30 site data", sessions: 1 },
-                { name: "Habit tracker widget", desc: "Quick iOS/web widget showing daily habit streaks", sessions: 1 },
-                { name: "Claude Code plugin for consulting", desc: "Custom skill that pulls client context before any task", sessions: 2 },
-                { name: "Newsletter site builder", desc: "Spin up a content site that drives traffic from X/Reddit", sessions: 2 },
-                { name: "X/Twitter account + first 30 posts", desc: "Create accounts, schedule 30 days of AI content, measure", sessions: 2 }
+            sections: [
+                {
+                    label: "Zero Effort Tests",
+                    items: [
+                        { name: "\"Build in public\" on X/LinkedIn", desc: "Does posting what I'm building get engagement?", size: "XS" },
+                        { name: "X/Twitter account + first 30 posts", desc: "Create account, schedule 30 days of AI content", size: "S" },
+                        { name: "Sell Claude Code consulting workflow", desc: "One LinkedIn post \u2014 would consultants pay?", size: "S" }
+                    ]
+                },
+                {
+                    label: "One-Session Spikes",
+                    items: [
+                        { name: "Chrome extension for client work", desc: "Quick-capture to Brain vault", size: "S" },
+                        { name: "Voice \u2192 structured notes", desc: "Pipe voice memos into Obsidian with AI formatting", size: "S" },
+                        { name: "WhatsApp bot for trip", desc: "Auto-respond to guest questions from joes30 data", size: "S" },
+                        { name: "Habit tracker widget", desc: "Quick iOS/web widget showing streaks", size: "S" }
+                    ]
+                },
+                {
+                    label: "Two-Session Spikes",
+                    items: [
+                        { name: "AI content automation on X", desc: "Can I automate valuable AI/consulting posts?", size: "M" },
+                        { name: "AI-powered client research tool", desc: "Paste company \u2192 get brief. Would I use this daily?", size: "M" },
+                        { name: "Local RAG over Brain vault", desc: "How good is local LLM Q&A over my notes?", size: "M" },
+                        { name: "Automated slide deck builder", desc: "Obsidian notes \u2192 polished .pptx", size: "M" },
+                        { name: "Claude Code plugin for consulting", desc: "Custom skill that pulls client context before any task", size: "M" },
+                        { name: "Newsletter site builder", desc: "Content site that drives traffic from X/Reddit", size: "M" }
+                    ]
+                }
             ]
         },
         revenue: {
@@ -480,17 +572,27 @@
             accent: "#10b981",
             desc: "Ideas that could make money. Validate before building.",
             active: null,
-            backlog: [
-                { name: "Acquire small digital asset", desc: "Buy a site/app already making money, improve it", capital: "\u00a30-5k" },
-                { name: "AI content on X/LinkedIn", desc: "Build audience \u2192 paid newsletter or consulting leads", capital: "\u00a30" },
-                { name: "\"Done for you\" AI setup for local SMBs", desc: "Fixed-price package: set up AI tools for a business in a week", capital: "\u00a30" },
-                { name: "Paid Obsidian consulting-OS template", desc: "Package Brain vault structure for consultants. Gumroad, \u00a329-49", capital: "\u00a30" },
-                { name: "Productised consulting service", desc: "Package a repeatable Hackett-style analysis as self-serve tool", capital: "\u00a30-1k" },
-                { name: "Micro-SaaS: Meeting intelligence", desc: "Upload recording \u2192 structured notes. Charge per use or monthly", capital: "\u00a30-1k" },
-                { name: "SaaS for niche client problem", desc: "Find a pain point from consulting, build a tool", capital: "\u00a31-5k" },
-                { name: "Template marketplace", desc: "Sell Obsidian/Notion templates for consultants on Gumroad", capital: "\u00a30" },
-                { name: "Freelance dev projects", desc: "Take on small builds (Next.js, Supabase) via Upwork/Toptal", capital: "\u00a30" },
-                { name: "Reddit community for AI consultants", desc: "Build community \u2192 monetise with resources, templates, courses", capital: "\u00a30" }
+            sections: [
+                {
+                    label: "Validate First (no code needed)",
+                    items: [
+                        { name: "AI content on X/LinkedIn", desc: "Post for 30 days, measure engagement", size: "XS" },
+                        { name: "Paid Obsidian consulting-OS template", desc: "Build landing page, share on LinkedIn/Reddit", size: "S" },
+                        { name: "\"Done for you\" AI setup for SMBs", desc: "Pitch 3 local businesses, see if they bite", size: "S" },
+                        { name: "Freelance dev projects", desc: "List on Upwork/Toptal, see what lands", size: "S" },
+                        { name: "Template marketplace", desc: "Build 3 templates, list on Gumroad", size: "S" },
+                        { name: "Reddit community for AI consultants", desc: "Create subreddit, post daily for 30 days", size: "S" }
+                    ]
+                },
+                {
+                    label: "Build After Validation",
+                    items: [
+                        { name: "Productised consulting service", desc: "Self-serve Hackett-style analysis tool", size: "M" },
+                        { name: "Micro-SaaS: Meeting intelligence", desc: "Upload recording \u2192 structured notes", size: "L" },
+                        { name: "SaaS for niche client problem", desc: "Find pain point, build tool", size: "L" },
+                        { name: "Acquire small digital asset", desc: "Research Acquire.com, Flippa, find a deal", size: "L" }
+                    ]
+                }
             ]
         },
         maintain: {
@@ -500,13 +602,13 @@
             desc: "Existing stuff that needs upkeep. Not a project \u2014 just keep it healthy.",
             active: null,
             items: [
-                { system: "Obsidian Brain vault", cadence: "Weekly", task: "Clear inbox, process loose notes, check orphans" },
-                { system: "Consulting-OS", cadence: "As needed", task: "Update frameworks, add knowledge items after engagements" },
-                { system: "Cortex", cadence: "As needed", task: "Keep local dashboard running, fix issues" },
-                { system: "Claude Code setup", cadence: "Monthly", task: "Update plugins, review CLAUDE.md, prune memory" },
-                { system: "GitHub repos", cadence: "Monthly", task: "Archive dead repos, update READMEs, check dependencies" },
-                { system: "joes30.com", cadence: "After May", task: "Archive or shut down" },
-                { system: "Wedding site", cadence: "After wedding", task: "Archive or shut down" }
+                { system: "Obsidian Brain vault", cadence: "Weekly", task: "Clear inbox, process loose notes", size: "XS" },
+                { system: "Claude Code setup", cadence: "Monthly", task: "Update plugins, review CLAUDE.md, prune memory", size: "XS" },
+                { system: "GitHub repos", cadence: "Monthly", task: "Archive dead repos, check dependencies", size: "XS" },
+                { system: "Consulting-OS", cadence: "As needed", task: "Update frameworks, add knowledge after engagements", size: "S" },
+                { system: "Cortex", cadence: "As needed", task: "Keep running, fix issues", size: "S" },
+                { system: "joes30.com", cadence: "After May", task: "Archive or shut down", size: "XS" },
+                { system: "Wedding sites", cadence: "After wedding", task: "Archive or shut down", size: "XS" }
             ]
         },
         learn: {
@@ -515,28 +617,50 @@
             accent: "#ec4899",
             desc: "Skills to pick up, tech to explore. Pull from here when you have curiosity energy.",
             active: null,
-            backlog: [
-                { name: "Marketing / growth / distribution", desc: "The gap is getting things in front of people", format: "Course / book" },
-                { name: "How to buy a digital business", desc: "Due diligence, valuation, where to find deals", format: "Research" },
-                { name: "Next.js App Router deep dive", desc: "Your stack \u2014 know it properly", format: "Build something" },
-                { name: "Supabase edge functions", desc: "For Anchor and future SaaS", format: "Tutorial + spike" },
-                { name: "AI agents / Claude Agent SDK", desc: "Build smarter automations", format: "Build an agent" },
-                { name: "Figma \u2192 code workflow", desc: "Faster UI development", format: "Practice with MCP" },
-                { name: "iOS shortcuts / widgets", desc: "Personal tools, habit tracking", format: "Build one shortcut" },
-                { name: "Data visualisation (D3 / Recharts)", desc: "For consulting deliverables and dashboards", format: "Build a component" },
-                { name: "Stripe integration", desc: "For any revenue project \u2014 need to take payments", format: "Follow docs" },
-                { name: "Prompt engineering for consulting", desc: "Better AI-assisted client work", format: "Structured practice" },
-                { name: "SEO fundamentals", desc: "For content plays, newsletter sites, landing pages", format: "Course / guide" },
-                { name: "Financial modelling for side hustles", desc: "Know your numbers before investing time/money", format: "Spreadsheets" }
+            sections: [
+                {
+                    label: "High Leverage (do these first)",
+                    items: [
+                        { name: "Marketing / growth / distribution", desc: "Gap between building and selling", size: "S" },
+                        { name: "How to buy a digital business", desc: "Due diligence, valuation, deal sources", size: "S" },
+                        { name: "SEO fundamentals", desc: "For content plays and landing pages", size: "S" },
+                        { name: "Financial modelling for side hustles", desc: "Know numbers before investing", size: "S" }
+                    ]
+                },
+                {
+                    label: "Technical Skills (when a project needs them)",
+                    items: [
+                        { name: "Stripe integration", desc: "Any revenue project needs payments", size: "M" },
+                        { name: "Next.js App Router deep dive", desc: "Your stack \u2014 know it properly", size: "M" },
+                        { name: "Supabase edge functions", desc: "For Anchor and future SaaS", size: "M" },
+                        { name: "AI agents / Claude Agent SDK", desc: "Smarter automations", size: "M" },
+                        { name: "Figma \u2192 code workflow", desc: "Faster UI development", size: "S" },
+                        { name: "iOS shortcuts / widgets", desc: "Personal tools, habit tracking", size: "S" },
+                        { name: "Data visualisation (D3 / Recharts)", desc: "Consulting deliverables, dashboards", size: "M" },
+                        { name: "Prompt engineering for consulting", desc: "Better AI-assisted client work", size: "S" }
+                    ]
+                }
             ]
         }
     };
+
+    function sizeTag(size) {
+        return `<span class="size-tag size-${size.toLowerCase()}">${size}</span>`;
+    }
+
+    function countItems(cat) {
+        let count = cat.active ? 1 : 0;
+        if (cat.backlog) count += cat.backlog.length;
+        if (cat.items) count += cat.items.length;
+        if (cat.sections) cat.sections.forEach(s => count += s.items.length);
+        return count;
+    }
 
     // Render stats row
     function renderStats() {
         const row = document.getElementById('stats-row');
         Object.entries(DATA).forEach(([key, cat]) => {
-            const count = cat.backlog?.length || cat.items?.length || 0;
+            const count = countItems(cat);
             const activeText = cat.active ? `Active: ${cat.active.name.split('—')[0].trim()}` : 'None active';
             const card = document.createElement('div');
             card.className = 'stat-card';
@@ -547,12 +671,27 @@
                 section.scrollIntoView({ behavior: 'smooth', block: 'start' });
             };
             card.innerHTML = `
-                <span class="stat-num">${count + (cat.active ? 1 : 0)}</span>
+                <span class="stat-num">${count}</span>
                 <span class="stat-label">${cat.label}</span>
                 <span class="stat-active">${activeText}</span>
             `;
             row.appendChild(card);
         });
+    }
+
+    function renderSectionTable(items) {
+        let html = `<table class="backlog-table"><thead><tr>
+            <th>Size</th><th>Item</th><th class="hide-mobile">Description</th>
+        </tr></thead><tbody>`;
+        items.forEach(item => {
+            html += `<tr>
+                <td>${sizeTag(item.size)}</td>
+                <td class="item-name">${item.name}</td>
+                <td class="hide-mobile">${item.desc}</td>
+            </tr>`;
+        });
+        html += `</tbody></table>`;
+        return html;
     }
 
     // Render categories
@@ -565,7 +704,7 @@
             section.id = `cat-${key}`;
             section.style.setProperty('--cat-accent', cat.accent);
 
-            const count = cat.backlog?.length || cat.items?.length || 0;
+            const count = countItems(cat);
             const activeBadge = cat.active
                 ? `<span class="cat-active-badge" style="background:${cat.accent}22;color:${cat.accent}">Active</span>`
                 : '';
@@ -587,6 +726,7 @@
                             ${tasks.map(t => `
                                 <li class="${t.done ? 'done' : ''}">
                                     <span class="check"></span>
+                                    ${sizeTag(t.size)}
                                     <span>${t.text}</span>
                                 </li>
                             `).join('')}
@@ -599,86 +739,41 @@
                 `;
             }
 
-            // Backlog
-            if (cat.backlog && cat.backlog.length > 0) {
+            // Ship backlog (special: phases + priority)
+            if (key === 'ship' && cat.backlog) {
                 bodyHTML += `<div class="section-divider">Backlog (${cat.backlog.length})</div>`;
+                bodyHTML += `<table class="backlog-table"><thead><tr>
+                    <th>#</th><th>Project</th><th class="hide-mobile">Phases</th><th>Priority</th>
+                </tr></thead><tbody>`;
+                cat.backlog.forEach((item, i) => {
+                    const pClass = item.priority === 'high' ? 'priority-high' : item.priority === 'medium' ? 'priority-medium' : 'priority-low';
+                    const sizeBadges = item.sizes ? item.sizes.split(' ').map(s => sizeTag(s)).join(' ') : '';
+                    bodyHTML += `<tr>
+                        <td class="item-num">${i + 1}</td>
+                        <td class="item-name">${item.name}</td>
+                        <td class="hide-mobile">${item.phases} phases: ${sizeBadges}</td>
+                        <td><span class="priority-tag ${pClass}">${item.priority}</span></td>
+                    </tr>`;
+                });
+                bodyHTML += `</tbody></table>`;
+            }
 
-                if (key === 'ship') {
-                    bodyHTML += `<table class="backlog-table"><thead><tr>
-                        <th>#</th><th>Project</th><th class="hide-mobile">What "done" looks like</th><th>Priority</th>
-                    </tr></thead><tbody>`;
-                    cat.backlog.forEach((item, i) => {
-                        const pClass = item.priority === 'high' ? 'priority-high' : item.priority === 'medium' ? 'priority-medium' : 'priority-low';
-                        bodyHTML += `<tr>
-                            <td class="item-num">${i + 1}</td>
-                            <td class="item-name">${item.name}</td>
-                            <td class="hide-mobile">${item.done}</td>
-                            <td><span class="priority-tag ${pClass}">${item.priority}</span></td>
-                        </tr>`;
-                    });
-                    bodyHTML += `</tbody></table>`;
-                } else if (key === 'automate') {
-                    bodyHTML += `<table class="backlog-table"><thead><tr>
-                        <th>#</th><th>Idea</th><th class="hide-mobile">What it does</th><th>Effort</th>
-                    </tr></thead><tbody>`;
-                    cat.backlog.forEach((item, i) => {
-                        bodyHTML += `<tr>
-                            <td class="item-num">${i + 1}</td>
-                            <td class="item-name">${item.name}</td>
-                            <td class="hide-mobile">${item.desc}</td>
-                            <td><span class="effort-tag">${item.effort}</span></td>
-                        </tr>`;
-                    });
-                    bodyHTML += `</tbody></table>`;
-                } else if (key === 'experiment') {
-                    bodyHTML += `<table class="backlog-table"><thead><tr>
-                        <th>#</th><th>Idea</th><th class="hide-mobile">Question to answer</th><th>Sessions</th>
-                    </tr></thead><tbody>`;
-                    cat.backlog.forEach((item, i) => {
-                        bodyHTML += `<tr>
-                            <td class="item-num">${i + 1}</td>
-                            <td class="item-name">${item.name}</td>
-                            <td class="hide-mobile">${item.desc}</td>
-                            <td><span class="effort-tag">${item.sessions} max</span></td>
-                        </tr>`;
-                    });
-                    bodyHTML += `</tbody></table>`;
-                } else if (key === 'revenue') {
-                    bodyHTML += `<table class="backlog-table"><thead><tr>
-                        <th>#</th><th>Idea</th><th class="hide-mobile">Description</th><th>Capital</th>
-                    </tr></thead><tbody>`;
-                    cat.backlog.forEach((item, i) => {
-                        bodyHTML += `<tr>
-                            <td class="item-num">${i + 1}</td>
-                            <td class="item-name">${item.name}</td>
-                            <td class="hide-mobile">${item.desc}</td>
-                            <td><span class="effort-tag">${item.capital}</span></td>
-                        </tr>`;
-                    });
-                    bodyHTML += `</tbody></table>`;
-                } else if (key === 'learn') {
-                    bodyHTML += `<table class="backlog-table"><thead><tr>
-                        <th>#</th><th>Topic</th><th class="hide-mobile">Why</th><th>Format</th>
-                    </tr></thead><tbody>`;
-                    cat.backlog.forEach((item, i) => {
-                        bodyHTML += `<tr>
-                            <td class="item-num">${i + 1}</td>
-                            <td class="item-name">${item.name}</td>
-                            <td class="hide-mobile">${item.desc}</td>
-                            <td><span class="effort-tag">${item.format}</span></td>
-                        </tr>`;
-                    });
-                    bodyHTML += `</tbody></table>`;
-                }
+            // Sections-based categories (automate, experiment, revenue, learn)
+            if (cat.sections) {
+                cat.sections.forEach(sec => {
+                    bodyHTML += `<div class="sub-section-label">${sec.label} (${sec.items.length})</div>`;
+                    bodyHTML += renderSectionTable(sec.items);
+                });
             }
 
             // Maintain items
-            if (cat.items) {
+            if (cat.items && key === 'maintain') {
                 bodyHTML += `<table class="maintain-table"><thead><tr>
-                    <th>System</th><th>Cadence</th><th class="hide-mobile">What to do</th>
+                    <th>Size</th><th>System</th><th>Cadence</th><th class="hide-mobile">What to do</th>
                 </tr></thead><tbody>`;
                 cat.items.forEach(item => {
                     bodyHTML += `<tr>
+                        <td>${sizeTag(item.size)}</td>
                         <td class="item-name">${item.system}</td>
                         <td><span class="cadence-tag">${item.cadence}</span></td>
                         <td class="hide-mobile">${item.task}</td>
@@ -691,7 +786,7 @@
                 <div class="category-header">
                     <h2><span class="cat-icon">${cat.icon}</span> ${cat.label} ${activeBadge}</h2>
                     <div style="display:flex;align-items:center;gap:0.75rem">
-                        <span class="cat-count">${count + (cat.active ? 1 : 0)} items</span>
+                        <span class="cat-count">${count} items</span>
                         <span class="chevron">&#9660;</span>
                     </div>
                 </div>
